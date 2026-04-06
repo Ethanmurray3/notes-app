@@ -1,7 +1,19 @@
 package main
 
-import "fmt"
+import (
+	"database/sql"
+	"github.com/Ethanmurray3/notes-app/internal/storage/sqlite"
+	"log"
+	_ "modernc.org/sqlite"
+)
 
 func main() {
-	fmt.Println("Hello World, This is my first go project")
+	db, err := sql.Open("sqlite", "note.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+	db.Ping()
+	defer db.Close()
+	repository := sqlite.NewRepository(db)
+	_ = repository
 }
