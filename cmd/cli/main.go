@@ -2,9 +2,9 @@ package main
 
 import (
 	"database/sql"
+	notepkg "github.com/Ethanmurray3/notes-app/internal/note"
+	sqlitepkg "github.com/Ethanmurray3/notes-app/internal/storage/sqlite"
 	"log"
-
-	"github.com/Ethanmurray3/notes-app/internal/storage/sqlite"
 	_ "modernc.org/sqlite"
 )
 
@@ -20,10 +20,22 @@ func main() {
 		log.Fatal(err)
 	}
 
-	repository, err := sqlite.NewRepository(db)
+	repository, err := sqlitepkg.NewRepository(db)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	_ = repository
+
+	note := notepkg.Note{
+		Title:   "First Note",
+		Content: "Hello from Go",
+	}
+
+	created, err := repository.Create(note)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	log.Println("Created note:", created)
 }
